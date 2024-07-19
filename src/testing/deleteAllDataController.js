@@ -1,6 +1,6 @@
 const db = require("../db/db");
 
 exports.deleteAllDataController = (req, res) => {
-  db = [];
+  db.videos = [];
   res.sendStatus(204);
 };
