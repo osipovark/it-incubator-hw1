@@ -3,12 +3,14 @@ const db = require("../db/db");
 exports.putSingleVideoController = (req, res) => {
   const error = { errorsMessages: [] };
 
-  const video = db.videos.find((v) => v.id === +req.params.id);
+  const videoIndex = db.videos.findIndex((v) => v.id === +req.params.id);
 
-  if (!video) {
+  if (videoIndex === -1) {
     console.log("404");
     res.sendStatus(404);
   }
+
+  const newVideo = { ...db.videos[videoIndex] };
 
   if (typeof req.body.title !== "string") {
     error.errorsMessages.push({
@@ -23,7 +25,7 @@ exports.putSingleVideoController = (req, res) => {
       field: "title",
     });
   } else {
-    video.title = req.body.title;
+    newVideo.title = req.body.title;
   }
 
   if (typeof req.body.author !== "string") {
@@ -39,11 +41,11 @@ exports.putSingleVideoController = (req, res) => {
       field: "author",
     });
   } else {
-    video.author = req.body.author;
+    newVideo.author = req.body.author;
   }
 
   if (typeof req.body.canBeDownloaded === "boolean") {
-    video.canBeDownloaded = req.body.canBeDownloaded;
+    newVideo.canBeDownloaded = req.body.canBeDownloaded;
   } else if (req.body.canBeDownloaded !== undefined) {
     error.errorsMessages.push({
       message:
@@ -54,7 +56,7 @@ exports.putSingleVideoController = (req, res) => {
 
   if (!isNaN(req.body.minAgeRestriction)) {
     if (req.body.minAgeRestriction === null) {
-      video.minAgeRestriction = req.body.minAgeRestriction;
+      newVideo.minAgeRestriction = req.body.minAgeRestriction;
     } else if (
       Number.parseInt(req.body.minAgeRestriction) !==
       +req.body.minAgeRestriction
@@ -74,7 +76,7 @@ exports.putSingleVideoController = (req, res) => {
         field: "minAgeRestriction",
       });
     } else {
-      video.minAgeRestriction = req.body.minAgeRestriction;
+      newVideo.minAgeRestriction = req.body.minAgeRestriction;
     }
   } else if (req.body.minAgeRestriction !== undefined) {
     error.errorsMessages.push({
@@ -94,14 +96,14 @@ exports.putSingleVideoController = (req, res) => {
       field: "publicationDate",
     });
   } else if (
-    Date.parse(req.body.publicationDate) < Date.parse(video.createdAt)
+    Date.parse(req.body.publicationDate) < Date.parse(newVideo.createdAt)
   ) {
     error.errorsMessages.push({
       message: "Video could not have been created after it was published",
       field: "publicationDate",
     });
   } else {
-    video.publicationDate = new Date(req.body.publicationDate).toISOString();
+    newVideo.publicationDate = new Date(req.body.publicationDate).toISOString();
   }
 
   if (Array.isArray(req.body.availableResolutions)) {
