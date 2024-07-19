@@ -95,14 +95,14 @@ exports.putSingleVideoController = (req, res) => {
         "Specified value for publicationDate field of the new video is not a valid date",
       field: "publicationDate",
     });
-  } /*else if (
+  } else if (
     Date.parse(req.body.publicationDate) < Date.parse(newVideo.createdAt)
   ) {
     error.errorsMessages.push({
       message: "Video could not have been created after it was published",
       field: "publicationDate",
     });
-  }*/ else {
+  } else {
     newVideo.publicationDate = new Date(req.body.publicationDate).toISOString();
   }
 
