@@ -46,7 +46,9 @@ exports.putSingleVideoController = (req, res) => {
 
   if (typeof req.body.canBeDownloaded === "boolean") {
     newVideo.canBeDownloaded = req.body.canBeDownloaded;
-  } else if (req.body.canBeDownloaded !== undefined) {
+  } else if (req.body.canBeDownloaded === undefined) {
+    newVideo.canBeDownloaded = false;
+  } else {
     error.errorsMessages.push({
       message:
         "You have specified a value of incorrect type for canBeDownloaded field of the new video",
@@ -186,6 +188,7 @@ exports.putSingleVideoController = (req, res) => {
   /**********************************************************************************/
 
   if (error.errorsMessages.length === 0) {
+    db.videos.splice(videoIndex, 1, newVideo);
     res.sendStatus(204);
   } else {
     res.status(400).send(error);
