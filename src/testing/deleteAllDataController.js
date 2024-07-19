@@ -1,5 +1,6 @@
 const db = require("../db/db");
 
 exports.deleteAllDataController = (req, res) => {
-  db = {};
+  db = [];
+  res.sendStatus(204);
 };
