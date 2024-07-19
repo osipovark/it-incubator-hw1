@@ -5,7 +5,7 @@ exports.postSingleVideoController = (req, res) => {
     db.videos = [];
   }
   const newVideo = {
-    id: db.videos.length > 0 ? Math.max(...db.videos.map((v) => v.id)) + 1 : 1,
+    id: db.videos.length > 0 ? Math.max(...db.videos.map((v) => v.id)) + 1 : 0,
   };
   const error = { errorsMessages: [] };
 

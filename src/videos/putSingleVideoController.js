@@ -3,7 +3,11 @@ const db = require("../db/db");
 exports.putSingleVideoController = (req, res) => {
   const error = { errorsMessages: [] };
 
-  const videoIndex = db.videos.findIndex((v) => v.id === +req.params.id);
+  console.log(req.params.id, +JSON.parse(req.params.id));
+
+  const videoIndex = db.videos.findIndex(
+    (v) => v.id === +JSON.parse(req.params.id)
+  );
 
   if (videoIndex === -1) {
     console.log("404");
