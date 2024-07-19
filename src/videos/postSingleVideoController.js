@@ -1,6 +1,9 @@
 const db = require("../db/db");
 
 exports.postSingleVideoController = (req, res) => {
+  if (JSON.stringify(db) === "{}") {
+    db.videos = [];
+  }
   const newVideo = {
     id: db.videos.length > 0 ? Math.max(...db.videos.map((v) => v.id)) + 1 : 1,
   };
